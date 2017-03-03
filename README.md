@@ -95,3 +95,16 @@ int ageLimit = 42;
 var people = session.Query<Person>("select * from People where Age < @ageLimit", 
 				new Dictionary<string, object> { { "ageLimit", ageLimit } });
 ```
+
+What data access might look like
+==================
+
+```csharp
+public PersonWithInterests GetPersonWithInterests(Guid id) {
+	var person = session.Load<Person>("Id", id);
+	var interests = session.Query<Interest>("select * from Interests where PersonId = @personId", new Dictionary<string,object> {{
+		"personId", person.Id
+	}});
+	return new PersonWithInterests { Person = person, Interests = interests };
+}
+```
